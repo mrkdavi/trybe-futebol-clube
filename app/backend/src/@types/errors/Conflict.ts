@@ -1,8 +1,8 @@
-import BaseError from './BaseError';
+// import BaseError from './BaseError';
 
-export default class Conflict extends BaseError {
-  constructor(msg = 'Conflict') {
-    super(msg);
-    this.statusCode = 409;
-  }
-}
+// export default class Conflict extends BaseError {
+//   constructor(msg = 'Conflict') {
+//     super(msg);
+//     this.statusCode = 409;
+//   }
+// }

@@ -1,8 +1,8 @@
-import BaseError from './BaseError';
+// import BaseError from './BaseError';
 
-export default class Forbidden extends BaseError {
-  constructor(msg = 'Forbidden') {
-    super(msg);
-    this.statusCode = 403;
-  }
-}
+// export default class Forbidden extends BaseError {
+//   constructor(msg = 'Forbidden') {
+//     super(msg);
+//     this.statusCode = 403;
+//   }
+// }
