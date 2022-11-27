@@ -4,7 +4,7 @@ import { LoginData, TokenResponse, ValidateTokenResponse } from '../@types/DTOs/
 import { Unauthorized } from '../@types/errors';
 import UserModel from '../database/models/User';
 
-export default class AuthService {
+export default class TeamService {
   static async login({ email, password }: LoginData): Promise<TokenResponse> {
     const user = await UserModel.findOne({
       where: { email },

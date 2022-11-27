@@ -1,4 +1,4 @@
-import { Request, Response, Router } from 'express';
+import { Router } from 'express';
 import { errorHandlerWrapper } from '../middlewares/errorHandler';
 import AuthController from '../controller/AuthController';
 import validateLogin from '../middlewares/loginValidator';
@@ -9,13 +9,13 @@ const router = Router();
 router.post(
   '/login',
   validateLogin,
-  errorHandlerWrapper((req: Request, res: Response) => AuthController.login(req, res)),
+  errorHandlerWrapper(AuthController.login),
 );
 
 router.get(
   '/login/validate',
   tokenValidator,
-  errorHandlerWrapper((req: Request, res: Response) => AuthController.validateToken(req, res)),
+  errorHandlerWrapper(AuthController.validateToken),
 );
 
 export default router;
