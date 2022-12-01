@@ -4,6 +4,8 @@ import chaiHttp = require('chai-http');
 
 import App from '../app';
 
+const sinon = require('sinon');
+
 import { Response } from 'superagent';
 
 chai.use(chaiHttp);
@@ -12,11 +14,19 @@ const { app } = new App();
 
 const { expect } = chai;
 
+import loginService from '../services/AuthService';
+import { loginReturnMock, validateLoginReturnMock } from './mocks/login';
+import { BadRequest, Unauthorized } from '../@types/errors';
 
 describe('/login', () => {
   let chaiHttpResponse: Response;
 
+  afterEach(() => sinon.restore());
+
   it('should response with token if credentials are correct', async () => {
+    sinon.stub(loginService, 'login')
+      .resolves(loginReturnMock)
+
     chaiHttpResponse = await chai
       .request(app)
       .post('/login')
@@ -30,6 +40,9 @@ describe('/login', () => {
   });
 
   it('should response with a error if email aren\'t correct', async () => {
+    sinon.stub(loginService, 'login')
+      .throws(new Unauthorized('Incorrect email or password'))
+
     chaiHttpResponse = await chai
       .request(app)
       .post('/login')
@@ -42,6 +55,9 @@ describe('/login', () => {
   });
 
   it('should response with a error if password aren\'t correct', async () => {
+    sinon.stub(loginService, 'login')
+      .throws(new Unauthorized('Incorrect email or password'))
+
     chaiHttpResponse = await chai
       .request(app)
       .post('/login')
@@ -54,6 +70,9 @@ describe('/login', () => {
   });
 
   it('should response with a error if credentials weren\'t sent', async () => {
+    sinon.stub(loginService, 'login')
+      .throws(new BadRequest('All fields must be filled'))
+
     chaiHttpResponse = await chai
       .request(app)
       .post('/login')
@@ -66,7 +85,12 @@ describe('/login', () => {
 describe('/login/validate', () => {
   let chaiHttpResponse: Response;
 
+  afterEach(() => sinon.restore());
+
   it('should response with token if credentials are correct', async () => {
+    sinon.stub(loginService, 'validateToken')
+      .resolves(validateLoginReturnMock)
+
     const token = await chai
       .request(app)
       .post('/login')
@@ -84,6 +108,9 @@ describe('/login/validate', () => {
   });
 
   it('should response with a error if token aren\'t valid', async () => {
+    sinon.stub(loginService, 'validateToken')
+      .throws(new Unauthorized('Expired or invalid token'))
+
     const token = 'patatipatata'
 
     chaiHttpResponse = await chai
@@ -95,6 +122,9 @@ describe('/login/validate', () => {
   });
 
   it('should response with a error if token doesn\'t exists', async () => {
+    sinon.stub(loginService, 'validateToken')
+      .throws(new Unauthorized('Token not found'))
+
     chaiHttpResponse = await chai
       .request(app)
       .get('/login/validate')
